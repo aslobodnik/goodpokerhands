@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Good Poker Texas Holdem Hands{% endblock %}
+
+{% block body %}
+	<h1 class="text-center">Texas Holdem Preflop Hands</h1>
+	<h5 class="muted text-center">Interesting Statistics</h5>	
+	<p>Different hands have a different chance of winning preflop. It is important to understand how each hand compares vs. a random one. Though it is quite rare to go up against a totally random hand preflop, in live poker with a few drinks it isn't unheard of to have someone start shoving all in preflop every hand. In this case it is useful to know that if you have <a href='texas-holdem/q4-queen-four'>Q4o</a> (Queen-Four offsuit) you are ahead of the drunk, but a little bit with an equity of 50.7%. All the possible preflop hands are described below.
+	</p>
+	<p>For the sake of simplicity, AcKc (Ace of clubs & King of clubs) are considered equal to AhKh (Ace of hearts & King of hearts) and are repersented as <a href='texas-holdem/ak-ace-king-suited'>AKs</a>. In the event we are talking about offsuit cards they are repersented by the letter 'o', such as AKo. In world where we do not care if the cards are suited or not, the 's' and the 'o' is ommited.
+	</p>
+	<table class="table table-sm table-bordered table-hover">
+		<tr>
+			<th colspan=7 class="text-center">Possible Texas Holdem Hands</th>
+		</tr>
+		{% for hand_row in all_hands | batch(7) %}
+		<tr>
+			{% for hand in hand_row %}
+			<td class="text-center"><a href='/texas-holdem/{{hand}}-{{long_name_1(hand)}}'>{{capitalize_hand(hand)}}</a></td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

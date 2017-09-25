@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Hand profile of {{long_name(hand)}} in Texas Holdem{% endblock %}
+
+{% block body %}
+ 
+	<h1 class="text-center"><small>{{capitalize_hand(hand)}} ({{long_name(hand)}})</small></h1>
+	<p> The chances of {{capitalize_hand(hand)}} being dealt preflop is {{format_percent(display_probility_of_hand_being_dealt(hand))}}. To get a sense of how often one should see {{long_name(hand)}}, you can assume that the average live game plays about 33 hands in an hour. The below tables gives the chance of seeing {{capitalize_hand(hand)}} at least once after X number of hours at the table.<p>
+		<div class="row">
+			<div class='col-lg-3'></div>
+		    <div class="col-lg-6 offset-lg-4 col-md-12">
+				<table class="table table-sm table-bordered table-hover">
+				  <tr>
+				    <th>Hours Played</th>
+				    <th class="text-right">Hands Dealt</th> 
+				    <th class="text-right">Chance of {{capitalize_hand(hand)}}</th>
+				  </tr>
+				  {% for n in range(2,8) %}
+				  <tr>
+					  <td>{{(1.62**n) | int}} hours</td>
+					  <td class="text-right">{{33*((1.62**n) | int)}}</td> 
+					  <td class="text-right">{{format_percent1(1 - (1 - display_probility_of_hand_being_dealt(hand))**(33*((1.62**n) | int)))}}</td>
+				  </tr>
+				  {% endfor %}
+				</table>
+			</div>			
+		</div>
+	{% if hand | length == 3 or hand.0 == hand.1 %}
+		<p>{{capitalize_hand(hand)}} vs. a random preflop hand in texas holdem is expected to win {{win_percent(hand)}} of time after all cards have been dealt.<p>
+	{% elif hand | length == 2 %}
+		<p>The chance of {{capitalize_hand(hand)}} beating a random preflop hand depends on if the hand is suited or not. In the case of a suited {{capitalize_hand(hand)}} it would beat a random hand {{win_percent(hand + 's')}}. However, if {{capitalize_hand(hand)}} is not suited it would win {{win_percent(hand +'o')}} of the time.<p>
+	{% endif %}
+	
+
+	<table class="table table-sm table-bordered table-hover">
+		<tr>
+	    	<th colspan=7 class="text-center">Possible Texas Holdem Hands</th>
+	  	</tr>
+		{% for hand_row in all_hands | batch(7) %}
+  	  	<tr>
+			{% for hand in hand_row %}
+    		<td class="text-center"><a href='/texas-holdem/{{hand}}-{{long_name_1(hand)}}'>{{capitalize_hand(hand)}}</a></td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}
